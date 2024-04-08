@@ -3,7 +3,7 @@ require 'pry'
 class Hangman
 
     # 1. When a new game is started, your script should load in the dictionary and randomly select...
-    # a word between 5 and 12 characters long for the secret word.
+    # a word between 5 and 12 characters long for the secret word. (Complete)
 
     # 2. Draw an stick figure as the game goes on and display a count so the player knows how many more... 
     # incorrect guesses they have before the game ends. 
@@ -47,4 +47,22 @@ class Hangman
         puts @board.join
     end
 
+    def player_guess
+        loop do 
+            guess = gets.downcase.chomp 
+            if guess.length == 1 && guess.match?(/[a-z]/)
+                # Feed into 'add_to_board' method TBD
+            else
+                puts "Please enter only one letter character."
+            end
+        end
+    end
+
+    def add_to_board
+    
+    end
+
+    def guess_tally
+
+    end
 end
