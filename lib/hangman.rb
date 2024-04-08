@@ -1,4 +1,6 @@
-class hangman
+require 'pry'
+
+class Hangman
 
     # 1. When a new game is started, your script should load in the dictionary and randomly select...
     # a word between 5 and 12 characters long for the secret word.
@@ -20,7 +22,29 @@ class hangman
     # which should jump you exactly back to where you were when you saved. Play on!
     
     def initialize
-    
+        word_bank
+        computer_choice
+    end
+
+    def word_bank   # Open the .txt file containing the list of words.
+        @words = []  # Create an array of words for our computer to guess from.
+        contents = File.foreach("google-10000-english.txt") do |line|   # Read the words from the file and store them in an array.
+            if line.chomp.length.between?(5, 12)
+                @words.append(line.downcase)
+            end
+        end
+    end
+
+    def computer_choice
+        chosen_word = @words.sample
+        puts "I've chosen a word with #{chosen_word.length} letters! Guess a letter to start the game of Hangman!"
+        # Select a random word from the array to be the target word for the game.
+        game_board(chosen_word)
+    end
+
+    def game_board(chosen_word)
+        @board = Array.new(chosen_word.length, "_ ")
+        puts @board.join
     end
 
 end
