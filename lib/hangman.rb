@@ -40,6 +40,7 @@ class Hangman
         puts "I've chosen a word with #{chosen_word.length} letters! Guess a letter to start the game of Hangman!"
         # Select a random word from the array to be the target word for the game.
         game_board(chosen_word)
+        player_guess(chosen_word)
     end
 
     def game_board(chosen_word)
@@ -47,21 +48,31 @@ class Hangman
         puts @board.join
     end
 
-    def player_guess
+    def player_guess(chosen_word)
+        puts "Guess letters within the word!"
         loop do 
             guess = gets.downcase.chomp 
             if guess.length == 1 && guess.match?(/[a-z]/)
-                # Feed into 'add_to_board' method TBD
+                if chosen_word.include?(guess)
+                    add_to_board
+                elsif "Incorrect."
+                    # Trigger method to create the hangman.
+                end
             else
                 puts "Please enter only one letter character."
             end
         end
     end
 
-    def add_to_board
-    
+    def add_to_board(guess)
+        chosen_word.each_with_index do |letter, index|
+            if guess == chosen_word[index]
+                @board[index] = guess
+            end
+        end
+        puts @board
     end
-
+    
     def guess_tally
 
     end
