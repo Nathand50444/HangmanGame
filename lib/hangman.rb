@@ -44,8 +44,9 @@ class Hangman
     end
 
     def game_board(chosen_word)
-        @board = Array.new(chosen_word.length, "_ ")
+        @board = Array.new(((chosen_word.length)-1), " _ ")
         puts @board.join
+        puts chosen_word
     end
 
     def player_guess(chosen_word)
@@ -54,7 +55,7 @@ class Hangman
             guess = gets.downcase.chomp 
             if guess.length == 1 && guess.match?(/[a-z]/)
                 if chosen_word.include?(guess)
-                    add_to_board
+                    add_to_board(guess, chosen_word)
                 elsif "Incorrect."
                     # Trigger method to create the hangman.
                 end
@@ -64,13 +65,16 @@ class Hangman
         end
     end
 
-    def add_to_board(guess)
-        chosen_word.each_with_index do |letter, index|
-            if guess == chosen_word[index]
-                @board[index] = guess
+    def add_to_board(guess, chosen_word)
+        word_array = chosen_word.chomp.split("")
+        word_array.each_with_index do |letter, index|
+            puts letter
+            puts index
+            if guess == letter
+                @board[index] = letter
             end
         end
-        puts @board
+        puts @board.join
     end
     
     def guess_tally
