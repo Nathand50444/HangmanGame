@@ -5,7 +5,7 @@ class Hangman
     # 1. When a new game is started, your script should load in the dictionary and randomly select...
     # a word between 5 and 12 characters long for the secret word. (Complete)
 
-    # 2. Draw an stick figure as the game goes on and display a count so the player knows how many more... 
+    # 2. Draw a stick figure as the game goes on and display a count so the player knows how many more... 
     # incorrect guesses they have before the game ends. 
     
     # 3. You should display which CORRECT letters have already been chosen...
@@ -24,6 +24,7 @@ class Hangman
     def initialize
         word_bank
         computer_choice
+        turn
     end
 
     def word_bank   # Open the .txt file containing the list of words.
@@ -40,7 +41,6 @@ class Hangman
         puts "I've chosen a word with #{chosen_word.length} letters! Guess a letter to start the game of Hangman!"
         # Select a random word from the array to be the target word for the game.
         game_board(chosen_word)
-        player_guess(chosen_word)
     end
 
     def game_board(chosen_word)
@@ -51,17 +51,15 @@ class Hangman
 
     def player_guess(chosen_word)
         puts "Guess letters within the word!"
-        loop do 
-            guess = gets.downcase.chomp 
-            if guess.length == 1 && guess.match?(/[a-z]/)
-                if chosen_word.include?(guess)
-                    add_to_board(guess, chosen_word)
-                elsif "Incorrect."
-                    # Trigger method to create the hangman.
-                end
-            else
-                puts "Please enter only one letter character."
+        guess = gets.downcase.chomp 
+        if guess.length == 1 && guess.match?(/[a-z]/)
+            if chosen_word.include?(guess)
+                add_to_board(guess, chosen_word)
+            elsif "Incorrect."
+                # Trigger method to create the hangman.
             end
+        else
+            puts "Please enter only one letter character."
         end
     end
 
@@ -77,7 +75,20 @@ class Hangman
         puts @board.join
     end
     
-    def guess_tally
-
+    def guess_tally(tally)
+        tally += 1
     end
+
+    def turn(chosen_word)
+        tally = 0
+        loop do 
+            player_guess(chosen_word)
+            guess_tally
+        end
+    end
+
+    def end_game?
+        if guess_tally == 15
+            puts 'Game Over! You have run out of guesses.'
+        elsif 
 end
