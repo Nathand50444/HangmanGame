@@ -36,24 +36,24 @@ class Hangman
     end
 
     def computer_choice
-        chosen_word = @words.sample
-        puts "I've chosen a word with #{chosen_word.length} letters! Guess a letter to start the game of Hangman!"
+        @chosen_word = @words.sample
+        puts "I've chosen a word with #{@chosen_word.length} letters! Guess a letter to start the game of Hangman!"
         # Select a random word from the array to be the target word for the game.
-        game_board(chosen_word)
-        turn(chosen_word)
+        game_board
+        turn
     end
 
-    def game_board(chosen_word)
-        @board = Array.new(((chosen_word.length)-1), " _ ")
+    def game_board
+        @board = Array.new(((@chosen_word.length)-1), " _ ")
         puts @board.join
     end
 
-    def player_guess(chosen_word)
+    def player_guess
         puts "Guess a letter within the word!"
         guess = gets.downcase.chomp
         if guess.length == 1 && guess.match?(/[a-z]/)
-            if chosen_word.include?(guess)
-                add_to_board(guess, chosen_word)
+            if @chosen_word.include?(guess)
+                add_to_board(guess, @chosen_word)
                 puts "Incorrect guesses: #{@incorrect_guesses.join(", ")}"
             else 
                 puts "Incorrect."
@@ -67,8 +67,8 @@ class Hangman
         end
     end
 
-    def add_to_board(guess, chosen_word)
-        word_array = chosen_word.chomp.split("")
+    def add_to_board(guess)
+        word_array = @chosen_word.chomp.split("")
         word_array.each_with_index do |letter, index|
             if guess == letter
                 @board[index] = letter
@@ -81,14 +81,14 @@ class Hangman
         @tally += 1
     end
 
-    def turn(chosen_word)
+    def turn
         @incorrect_guesses = []
         @tally = 0
         @i_tally = 0
         loop do 
-            player_guess(chosen_word)
+            player_guess
             guess_tally
-            break if end_game?(chosen_word)
+            break if end_game?
         end
     end
 
@@ -96,14 +96,14 @@ class Hangman
         @i_tally += 1
     end
 
-    def end_game?(chosen_word) 
+    def end_game?
         if !@board.include?(" _ ")
             puts 'Well done! you guessed the word!'
-            puts "The word was #{chosen_word}!"
+            puts "The word was #{@chosen_word}!"
             true
         elsif @i_tally == 10
             puts 'Game Over! You had too many incorrect guesses'
-            puts "The word was #{chosen_word}!"
+            puts "The word was #{@chosen_word}!"
             true
         elsif @tally == 14 
             puts 'Game Over! You have run out of guesses.'
