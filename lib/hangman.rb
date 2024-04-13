@@ -24,7 +24,6 @@ class Hangman
     def initialize
         word_bank
         computer_choice
-        turn
     end
 
     def word_bank   # Open the .txt file containing the list of words.
@@ -41,6 +40,7 @@ class Hangman
         puts "I've chosen a word with #{chosen_word.length} letters! Guess a letter to start the game of Hangman!"
         # Select a random word from the array to be the target word for the game.
         game_board(chosen_word)
+        turn(chosen_word)
     end
 
     def game_board(chosen_word)
@@ -55,8 +55,10 @@ class Hangman
         if guess.length == 1 && guess.match?(/[a-z]/)
             if chosen_word.include?(guess)
                 add_to_board(guess, chosen_word)
-            elsif "Incorrect."
-                # Trigger method to create the hangman.
+            else 
+                puts "Incorrect."
+                incorrect_tally
+                guess_tally
             end
         else
             puts "Please enter only one letter character."
@@ -75,20 +77,30 @@ class Hangman
         puts @board.join
     end
     
-    def guess_tally(tally)
-        tally += 1
+    def guess_tally
+        @tally += 1
     end
 
     def turn(chosen_word)
-        tally = 0
+        @tally = 0
+        @i_tally = 0
         loop do 
             player_guess(chosen_word)
             guess_tally
+            end_game?
         end
     end
 
+    def incorrect_tally
+        @i_tally += 1
+    end
+
     def end_game?
-        if guess_tally == 15
+        if @tally == 14
             puts 'Game Over! You have run out of guesses.'
-        elsif 
+        elsif @i_tally == 8
+            puts 'Game Over! You have too many incorrect guesses'
+        elsif !@board.include?("_")
+            puts 'Well done! you guessed the word!'
+    end
 end
