@@ -46,17 +46,19 @@ class Hangman
     def game_board(chosen_word)
         @board = Array.new(((chosen_word.length)-1), " _ ")
         puts @board.join
-        puts chosen_word
     end
 
     def player_guess(chosen_word)
         puts "Guess a letter within the word!"
-        guess = gets.downcase.chomp 
+        guess = gets.downcase.chomp
         if guess.length == 1 && guess.match?(/[a-z]/)
             if chosen_word.include?(guess)
                 add_to_board(guess, chosen_word)
+                puts "Incorrect guesses: #{@incorrect_guesses.join(", ")}"
             else 
                 puts "Incorrect."
+                @incorrect_guesses.append(guess)
+                puts "Incorrect guesses: #{@incorrect_guesses.join(", ")}"
                 incorrect_tally
                 guess_tally
             end
@@ -68,8 +70,6 @@ class Hangman
     def add_to_board(guess, chosen_word)
         word_array = chosen_word.chomp.split("")
         word_array.each_with_index do |letter, index|
-            puts letter
-            puts index
             if guess == letter
                 @board[index] = letter
             end
@@ -82,12 +82,13 @@ class Hangman
     end
 
     def turn(chosen_word)
+        @incorrect_guesses = []
         @tally = 0
         @i_tally = 0
         loop do 
             player_guess(chosen_word)
             guess_tally
-            break if end_game?
+            break if end_game?(chosen_word)
         end
     end
 
@@ -95,15 +96,17 @@ class Hangman
         @i_tally += 1
     end
 
-    def end_game?
-        if @tally == 14
-            puts 'Game Over! You have run out of guesses.'
-            true
-        elsif @i_tally == 8
-            puts 'Game Over! You had too many incorrect guesses'
-            true
-        elsif !@board.include?(" _ ")
+    def end_game?(chosen_word) 
+        if !@board.include?(" _ ")
             puts 'Well done! you guessed the word!'
+            puts "The word was #{chosen_word}!"
+            true
+        elsif @i_tally == 10
+            puts 'Game Over! You had too many incorrect guesses'
+            puts "The word was #{chosen_word}!"
+            true
+        elsif @tally == 14 
+            puts 'Game Over! You have run out of guesses.'
             true
         else
             false
