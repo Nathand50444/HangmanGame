@@ -50,7 +50,7 @@ class Hangman
     end
 
     def player_guess(chosen_word)
-        puts "Guess letters within the word!"
+        puts "Guess a letter within the word!"
         guess = gets.downcase.chomp 
         if guess.length == 1 && guess.match?(/[a-z]/)
             if chosen_word.include?(guess)
@@ -87,7 +87,7 @@ class Hangman
         loop do 
             player_guess(chosen_word)
             guess_tally
-            end_game?
+            break if end_game?
         end
     end
 
@@ -98,9 +98,15 @@ class Hangman
     def end_game?
         if @tally == 14
             puts 'Game Over! You have run out of guesses.'
+            true
         elsif @i_tally == 8
-            puts 'Game Over! You have too many incorrect guesses'
-        elsif !@board.include?("_")
+            puts 'Game Over! You had too many incorrect guesses'
+            true
+        elsif !@board.include?(" _ ")
             puts 'Well done! you guessed the word!'
+            true
+        else
+            false
+        end
     end
 end
