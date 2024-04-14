@@ -22,8 +22,15 @@ class Hangman
     # which should jump you exactly back to where you were when you saved. Play on!
     
     def initialize
+        new_game
+        #load_game
+    end
+
+    def new_game
         word_bank
         computer_choice
+        game_board
+        turn
     end
 
     def word_bank   # Open the .txt file containing the list of words.
@@ -39,8 +46,6 @@ class Hangman
         @chosen_word = @words.sample
         puts "I've chosen a word with #{@chosen_word.length} letters! Guess a letter to start the game of Hangman!"
         # Select a random word from the array to be the target word for the game.
-        game_board
-        turn
     end
 
     def game_board
@@ -53,7 +58,7 @@ class Hangman
         guess = gets.downcase.chomp
         if guess.length == 1 && guess.match?(/[a-z]/)
             if @chosen_word.include?(guess)
-                add_to_board(guess, @chosen_word)
+                add_to_board(guess)
                 puts "Incorrect guesses: #{@incorrect_guesses.join(", ")}"
             else 
                 puts "Incorrect."
@@ -61,9 +66,10 @@ class Hangman
                 puts "Incorrect guesses: #{@incorrect_guesses.join(", ")}"
                 incorrect_tally
                 guess_tally
+                puts @board.join
             end
         else
-            puts "Please enter only one letter character."
+            puts "Please enter only a one letter character."
         end
     end
 
@@ -98,18 +104,37 @@ class Hangman
 
     def end_game?
         if !@board.include?(" _ ")
-            puts 'Well done! you guessed the word!'
-            puts "The word was #{@chosen_word}!"
+            puts 'Well done! You guessed the word!'
+            print "#{@chosen_word}"
             true
         elsif @i_tally == 10
             puts 'Game Over! You had too many incorrect guesses'
-            puts "The word was #{@chosen_word}!"
+            print "The word was #{@chosen_word}"
             true
         elsif @tally == 14 
             puts 'Game Over! You have run out of guesses.'
+            print "The word was #{@chosen_word}"
             true
         else
             false
         end
     end
+
+    def save_game(filename)
+        File.open(filename, 'w') do |file|
+            file.write(JSON.generate(self.to_h))
+        end
+        puts "Game saved successfully!"
+    end
+
+    def to_h
+        {
+            chosen_word: @chosen_word,
+            board: @board,
+            incorrect_guesses: @incorrect_guesses,
+            tally: @tally,
+            i_tally: @i_tally
+        }
+    end
+
 end
