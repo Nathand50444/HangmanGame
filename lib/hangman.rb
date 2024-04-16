@@ -22,8 +22,38 @@ class Hangman
     # which should jump you exactly back to where you were when you saved. Play on!
     
     def initialize
-        new_game
-        #load_game
+        puts "Would you like to start a new game or load a saved game? (new/load)"
+        choice = gets.chomp.downcase
+
+        if choice == "new"
+            new_game
+        elsif choice == "load"
+            load_game
+        else
+            puts "Invalid choice. Exiting."
+            exit
+        end
+    end
+
+    def load_game
+        puts "Enter the filename to load:"
+        filename = gets.chomp
+
+        if File.exist?(filename)
+            data = JSON.parse(File.read(filename))
+            @chosen_word = data['chosen_word']
+            @board = data['board']
+            @incorrect_guesses = data['incorrect_guesses']
+            @tally = data['tally']
+            @i_tally = data['i_tally']
+
+            puts "Game loaded successfully!"
+            game_board
+            turn
+        else
+            puts "File not found. Please enter a valid filename."
+            load_game
+        end
     end
 
     def new_game
@@ -49,12 +79,12 @@ class Hangman
     end
 
     def game_board
-        @board = Array.new(((@chosen_word.length)-1), " _ ")
-        puts @board.join
+        display_board = @board.map { |char| char == " _ " ? " _ " : char }
+        puts display_board.join
     end
 
     def player_guess
-        puts "Guess a letter within the word!"
+        puts "Guess a letter within the word! (or enter 'save' to save the game)"
         guess = gets.downcase.chomp
         if guess.length == 1 && guess.match?(/[a-z]/)
             if @chosen_word.include?(guess)
@@ -68,6 +98,9 @@ class Hangman
                 guess_tally
                 puts @board.join
             end
+        elsif guess == "save"
+                save_game("saved_game.json")
+                exit
         else
             puts "Please enter only a one letter character."
         end
@@ -136,5 +169,4 @@ class Hangman
             i_tally: @i_tally
         }
     end
-
 end
