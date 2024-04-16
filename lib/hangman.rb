@@ -35,6 +35,19 @@ class Hangman
         end
     end
 
+
+    def new_game
+        word_bank
+        computer_choice
+        initialize_board
+        game_board
+        turn
+    end
+
+    def initialize_board
+        @board = Array.new(@chosen_word.length, " _ ")
+    end
+
     def load_game
         puts "Enter the filename to load:"
         filename = gets.chomp
@@ -54,13 +67,6 @@ class Hangman
             puts "File not found. Please enter a valid filename."
             load_game
         end
-    end
-
-    def new_game
-        word_bank
-        computer_choice
-        game_board
-        turn
     end
 
     def word_bank   # Open the .txt file containing the list of words.
@@ -157,7 +163,7 @@ class Hangman
         File.open(filename, 'w') do |file|
             file.write(JSON.generate(self.to_h))
         end
-        puts "Game saved successfully!"
+        puts "Game saved successfully as #{filename}!"
     end
 
     def to_h
