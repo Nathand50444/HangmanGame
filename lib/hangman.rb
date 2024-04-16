@@ -45,7 +45,7 @@ class Hangman
     end
 
     def initialize_board
-        @board = Array.new(@chosen_word.length, " _ ")
+        @board = Array.new(((@chosen_word.length)-1), " _ ")
     end
 
     def load_game
@@ -105,7 +105,7 @@ class Hangman
                 puts @board.join
             end
         elsif guess == "save"
-                save_game("saved_game.json")
+                save_game
                 exit
         else
             puts "Please enter only a one letter character."
@@ -159,7 +159,10 @@ class Hangman
         end
     end
 
-    def save_game(filename)
+    def save_game
+        puts "Enter the filename to save:"
+        filename = gets.chomp
+
         File.open(filename, 'w') do |file|
             file.write(JSON.generate(self.to_h))
         end
