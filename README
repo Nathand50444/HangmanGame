@@ -1,0 +1,32 @@
+# Hangman Game README
+
+## Overview
+
+This is a simple implementation of the classic Hangman game in Ruby. The game allows a single player to play against the computer, guessing letters to form a word.
+
+## Gameplay
+
+Here's a brief overview of how the game works:
+
+1. The computer chooses a random word from a predefined list.
+2. The player is presented with a blank space representation of the word, with each letter replaced by an underscore.
+3. The player makes a guess by typing a letter.
+4. If the letter is correct, the computer fills in the corresponding blank space(s).
+5. If the letter is incorrect, the computer draws a part of a hangman's gallows.
+6. The game continues until the player either guesses the word correctly or the gallows is complete and the player is "hanged."
+
+## Features
+
+* The game allows players to start a new game or load a saved game.
+* Players can save their progress at any time during the game.
+* The game keeps track of the number of correct and incorrect guesses.
+* The game ends when the player either guesses the word correctly or runs out of guesses.
+
+## Files
+
+* `lib/hangman.rb`: The main game logic and classes.
+* `README.md`: This file.
+
+## Installation
+
+To play the game, simply clone the repository and run the `lib/hangman.rb` file using Ruby.
